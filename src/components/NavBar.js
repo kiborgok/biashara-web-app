@@ -118,7 +118,7 @@ function NavBar({ showProfile, setShowProfile }) {
                   </Menu>
                 </div>
               </div>
-              <div className="-mr-2 flex md:hidden">
+              <div className="flex md:hidden">
                 {/* Mobile menu button */}
                 <Disclosure.Button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                   <span className="sr-only">Open main menu</span>
@@ -137,7 +137,7 @@ function NavBar({ showProfile, setShowProfile }) {
               {navigation.map((item) => (
                 <Disclosure.Button
                   key={item.name}
-                  as="a"
+                  as={NavLink}
                   to={item.to}
                   className={classNames(
                     item.current
@@ -179,6 +179,10 @@ function NavBar({ showProfile, setShowProfile }) {
               <div className="mt-3 px-2 space-y-1">
                 {userNavigation.map((item) => (
                   <Disclosure.Button
+                    onClick={() => {
+                      item.name === "Your Profile" &&
+                        setShowProfile(!showProfile);
+                    }}
                     key={item.name}
                     as="a"
                     to={item.to}
