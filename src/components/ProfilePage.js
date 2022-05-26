@@ -2,9 +2,9 @@
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import Example from "./ProfileContent";
+import ProfileContent from "./ProfileContent";
 
-export default function ProfilePage({showProfile, setShowProfile}) {
+export default function ProfilePage({ showProfile, setShowProfile }) {
   // const [open, setOpen] = useState(true);
 
   return (
@@ -64,7 +64,7 @@ export default function ProfilePage({showProfile, setShowProfile}) {
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">
                       {/* Replace with your content */}
-                      <Example />
+                      <ProfileContent />
                       {/* /End replace */}
                     </div>
                   </div>
