@@ -14,7 +14,7 @@ import LoginPage from "./components/SigninPage";
 import SignupPage from "./components/SignupPage";
 import ProfilePage from "./components/ProfilePage";
 import Admin from "./components/admin/Admin";
-import { UserContext } from "./context/UserContect";
+import { UserContext } from "./context/UserContext";
 
 function App() {
   const auth = getAuth(app);
@@ -51,8 +51,18 @@ function App() {
           alignItems: "center",
           justifyContent: "center",
         }}
+        className="bg-yellow-100"
       >
-        Loading...
+        <span className="flex h-3 w-3">
+          <div className="flex-shrink-0">
+            <img
+              className="h-8 w-8"
+              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+              alt="Workflow"
+            />
+          </div>
+          <span className="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-sky-900 opacity-75"></span>
+        </span>
       </div>
     );
 
