@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContect";
+import { UserContext } from "../context/UserContext";
 
 import { getAuth, updateProfile } from "firebase/auth";
 import {
@@ -13,14 +13,17 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 
 export default function ProfileContent() {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [progresspercent, setProgresspercent] = useState(0);
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
+  const [msg, setMsg] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setDisplayName(user ? !user.displayName ? "" : user.displayName : "");
-    setEmail(user ? user.email: "");
+    setDisplayName(user ? (!user.displayName ? "" : user.displayName) : "");
+    setEmail(user ? user.email : "");
   }, [user]);
 
   function updatePhoto(uri) {
@@ -28,8 +31,8 @@ export default function ProfileContent() {
       photoURL: uri,
     })
       .then(() => {
-        // setProfilePhoto(user.photoURL)
-        console.log("profile updated");
+        setUser({ ...user, photoURL: uri });
+        setProfile("Profile updated successfully")
       })
       .catch((error) => {
         console.log(error);
@@ -65,15 +68,40 @@ export default function ProfileContent() {
     );
   }
 
+  function handleSubmit(e) {
+    
+    e.preventDefault();
+    setLoading(true);
+    const loginAndUpdate = async () => {
+      await updateProfile(auth.currentUser, {
+        displayName,
+      })
+        .then(() => {
+          setLoading(false);
+          setMsg("Display name updated successfully")
+        })
+        .catch((error) => {
+          setLoading(false);
+        });
+    };
+    loginAndUpdate();
+  }
+
   return (
     <>
       <div className="md:grid md:grid-cols-2 md:gap-6">
         <div className="mt-5 md:mt-0 md:col-span-2">
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit}>
             <div className="shadow sm:rounded-md sm:overflow-hidden">
               <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                 <div>
-                  {progresspercent ? <h2>{progresspercent}</h2> : null}
+                  {progresspercent > 0 && progresspercent < 100 ? (
+                    <h2 className="text-orange-400">{progresspercent}%</h2>
+                  ) : null}
+
+                  {profile ? (
+                    <h2 className="text-green-400">{profile}</h2>
+                  ) : null}
                   <label className="block text-sm font-medium text-gray-700">
                     Photo
                   </label>
@@ -94,7 +122,7 @@ export default function ProfileContent() {
                         src={
                           user && user.photoURL !== null
                             ? user.photoURL
-                            : "Upload Photo"
+                            : "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
                         }
                         alt="Profile"
                       />
@@ -116,6 +144,7 @@ export default function ProfileContent() {
                     >
                       Display Name
                     </label>
+                    {msg ? <h2 className="text-green-400">{msg}</h2> : null}
                     <input
                       type="text"
                       name="username"
@@ -151,7 +180,7 @@ export default function ProfileContent() {
                   type="submit"
                   className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Save
+                  {loading ? "Saving" : "Save"}
                 </button>
               </div>
             </div>

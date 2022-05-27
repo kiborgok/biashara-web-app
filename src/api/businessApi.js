@@ -19,6 +19,26 @@ export async function addBusiness(business) {
   } catch (error) {}
 }
 
+export async function addRating(rating) {
+  try {
+    const { id } = await addDoc(collection(db, "biashara-rating"), {
+      rating,
+    });
+    return id;
+  } catch (error) {}
+}
+
+export async function getRatings() {
+  const ratingsCollection = collection(db, "biashara-rating");
+  const ratings = await getDocs(ratingsCollection);
+  const ratingsList = ratings.docs.map((doc) => {
+    const id = doc.id;
+    const { rating } = doc.data();
+    return { ...rating, id };
+  });
+  return ratingsList;
+}
+
 export async function getBusinesses() {
   const businessesCollection = collection(db, "biashara-businesses");
   const businesses = await getDocs(businessesCollection);

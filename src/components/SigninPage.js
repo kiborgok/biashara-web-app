@@ -2,10 +2,11 @@ import React, { useState, useContext } from "react";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { signIn } from "../api/authApi";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "../context/UserContect";
-
+import { UserContext } from "../context/UserContext";
 
 function SigninPage() {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { user } = useContext(UserContext);
   const [signinData, setSigninData] = useState({
     email: "",
@@ -20,14 +21,16 @@ function SigninPage() {
     });
   }
   async function loginUser() {
+    setLoading(true)
     try {
-      console.log("pending");
-      const {
-        user: { uid, displayName, email },
-      } = await signIn(signinData.email, signinData.password);
-      console.log("resolved", uid, displayName, email);
+      await signIn(signinData.email, signinData.password);
+      <Navigate to="/" replace={true} />;
+      setLoading(false);
     } catch (error) {
-      console.log("rejected", error);
+      setError(
+        error.code === "auth/wrong-password" ? "Wrong email/password" : "Try again later"
+      );
+      setLoading(false)
     }
   }
 
@@ -36,8 +39,7 @@ function SigninPage() {
     loginUser();
   }
 
-  if(user) return <Navigate to="/" replace={true} />; 
-
+  if (user) return <Navigate to="/" replace={true} />;
 
   return (
     <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -45,7 +47,7 @@ function SigninPage() {
         <div>
           <img
             className="mx-auto h-12 w-auto"
-            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+            src="https://img.icons8.com/5686E1/androidL/2x/fitbit.png"
             alt="Workflow"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -55,6 +57,7 @@ function SigninPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm space-y-2">
+            {error ? <p className="text-red-600">{error}</p> : null}
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
@@ -65,7 +68,7 @@ function SigninPage() {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-yellow-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Email address"
                 onChange={handleChange}
                 value={signinData.email}
@@ -81,7 +84,7 @@ function SigninPage() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-yellow-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
                 onChange={handleChange}
                 value={signinData.password}
@@ -94,7 +97,7 @@ function SigninPage() {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                 <LockClosedIcon
@@ -102,7 +105,7 @@ function SigninPage() {
                   aria-hidden="true"
                 />
               </span>
-              Sign in
+              {loading ? "Processing..." : "Sign in"}
             </button>
           </div>
         </form>

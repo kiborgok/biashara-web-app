@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import AdminNav from "./AdminNav";
 import BusinessesTable from './BusinessesPage';
 import CategoriesTable from './CategoriesPage';
-import UsersTable from './UsersTable';
+import Dashboard from './Dashboard';
+import {Navigate} from "react-router-dom"
+import { UserContext } from '../../context/UserContext';
 
 function Admin() {
+  const {user} = useContext(UserContext)
+  if(!user) return <Navigate to="/" replace={true} />
     return (
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 p-2">
         <AdminNav />
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <Routes>
-            <Route path="" element={<h1>Admin dashboard</h1>} />
-            <Route path="users" element={<UsersTable />} />
+            <Route path="" element={<Dashboard />} />
             <Route path="categories" element={<CategoriesTable />} />
             <Route path="businesses" element={<BusinessesTable />} />
           </Routes>

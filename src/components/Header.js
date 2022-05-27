@@ -1,19 +1,21 @@
-function Header() {
+function Header({search, setSearch}) {
   return (
     <header className="bg-white shadow">
       <div className="flex flex-col md:flex-row justify-between md: justify-center max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 className="m-2 text-center text-3xl font-bold text-gray-900">
+        <h1 className="m-2 text-center text-3xl font-bold text-yellow-300">
           Biashara Hub
         </h1>
 
         <div className="flex items-center justify-center">
-          <div className="flex border-2 rounded">
+          <div className="flex border-2 border-yellow-300 rounded">
             <input
               type="text"
               className="px-4 py-2"
               placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-            <button className="flex items-center justify-center px-4 border-l">
+            <button className="flex items-center justify-center px-4 border-l border-yellow-300">
               <svg
                 className="w-6 h-6 text-gray-600"
                 fill="currentColor"

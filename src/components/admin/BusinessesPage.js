@@ -250,9 +250,6 @@ export default function BusinessesTable() {
               Description
             </th>
             <th scope="col" className="px-6 py-3">
-              Rating
-            </th>
-            <th scope="col" className="px-6 py-3">
               <span className="sr-only">Delete</span>
             </th>
           </tr>
@@ -275,7 +272,6 @@ export default function BusinessesTable() {
               <td className="px-6 py-4">{business.name}</td>
               <td className="px-6 py-4">{business.category.name}</td>
               <td className="px-6 py-4">{business.description}</td>
-              <td className="px-6 py-4">{business.rating}</td>
               <td className="px-6 py-4 text-right">
                 <button className="font-medium text-red-600 dark:text-red-500 hover:underline">
                   Delete

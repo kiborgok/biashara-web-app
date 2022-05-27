@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "*******************************",
+  apiKey: "AIzaSyB7a9a46yzEDqY41MAaBE2fWrZJKd9Zsck",
   authDomain: "biashara-hub.firebaseapp.com",
   projectId: "biashara-hub",
   storageBucket: "biashara-hub.appspot.com",

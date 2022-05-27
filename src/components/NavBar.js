@@ -5,8 +5,8 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import app from "../api/firebaseConfig";
 import { getAuth, signOut } from "firebase/auth";
 
-import { NavLink } from "react-router-dom";
-import { UserContext } from "../context/UserContect";
+import { NavLink,Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 // const user = {
 //   name: "Tom Cook",
@@ -15,10 +15,10 @@ import { UserContext } from "../context/UserContect";
 //     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 // };
 const navigation = [
-  { name: "Home", to: "/", current: true },
-  { name: "Sign Up", to: "/signup", current: false },
-  { name: "Sign In", to: "/signin", current: false },
-  { name: "Admin", to: "/admin", current: false },
+  { name: "Home", to: "/" },
+  { name: "Sign Up", to: "/signup" },
+  { name: "Sign In", to: "/signin" },
+  { name: "Admin", to: "/admin" },
 ];
 const userNavigation = [
   { name: "Your Profile", to: "#" },
@@ -33,7 +33,7 @@ function NavBar({ showProfile, setShowProfile }) {
   const { user } = useContext(UserContext);
   const auth = getAuth(app);
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-yellow-200">
       {({ open }) => (
         <>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +42,7 @@ function NavBar({ showProfile, setShowProfile }) {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8"
-                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                    src="https://img.icons8.com/5686E1/androidL/2x/fitbit.png"
                     alt="Workflow"
                   />
                 </div>
@@ -54,13 +54,17 @@ function NavBar({ showProfile, setShowProfile }) {
                         <NavLink
                           key={item.name}
                           to={item.to}
-                          className={classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium"
-                          )}
-                          aria-current={item.current ? "page" : undefined}
+                          className={({ isActive }) =>
+                            classNames(
+                              isActive
+                                ? "bg-gray-900 text-white"
+                                : "text-red-600 hover:bg-gray-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )
+                          }
+                          aria-current={({ isActive }) =>
+                            isActive ? "page" : undefined
+                          }
                         >
                           {item.name}
                         </NavLink>
@@ -71,13 +75,17 @@ function NavBar({ showProfile, setShowProfile }) {
                         <NavLink
                           key={item.name}
                           to={item.to}
-                          className={classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium"
-                          )}
-                          aria-current={item.current ? "page" : undefined}
+                          className={({ isActive }) =>
+                            classNames(
+                              isActive
+                                ? "bg-gray-900 text-white"
+                                : "text-red-600 hover:bg-gray-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )
+                          }
+                          aria-current={({ isActive }) =>
+                            isActive ? "page" : undefined
+                          }
                         >
                           {item.name}
                         </NavLink>
@@ -98,9 +106,9 @@ function NavBar({ showProfile, setShowProfile }) {
                             src={
                               user
                                 ? user.photoURL === null
-                                  ? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                  ? "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
                                   : user.photoURL
-                                : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                : "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
                             }
                             alt=""
                           />
@@ -126,7 +134,7 @@ function NavBar({ showProfile, setShowProfile }) {
                                     else if (item.name === "Sign out") {
                                       signOut(auth)
                                         .then(() => {
-                                          console.log("Logged out");
+                                          <Navigate to="/" replace={true} />;
                                         })
                                         .catch((error) => {
                                           console.log("Signout error", error);
@@ -134,10 +142,12 @@ function NavBar({ showProfile, setShowProfile }) {
                                     }
                                   }}
                                   to={item.to}
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
+                                  className={({ isActive }) =>
+                                    classNames(
+                                      isActive ? "bg-gray-100" : "",
+                                      "block px-4 py-2 text-sm text-gray-700"
+                                    )
+                                  }
                                 >
                                   {item.name}
                                 </NavLink>
@@ -172,13 +182,17 @@ function NavBar({ showProfile, setShowProfile }) {
                     key={item.name}
                     as={NavLink}
                     to={item.to}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block px-3 py-2 rounded-md text-base font-medium"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
+                    className={({ isActive }) =>
+                      classNames(
+                        isActive
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium"
+                      )
+                    }
+                    aria-current={({ isActive }) =>
+                      isActive ? "page" : undefined
+                    }
                   >
                     {item.name}
                   </Disclosure.Button>
@@ -190,13 +204,17 @@ function NavBar({ showProfile, setShowProfile }) {
                     key={item.name}
                     as={NavLink}
                     to={item.to}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block px-3 py-2 rounded-md text-base font-medium"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
+                    className={({ isActive }) =>
+                      classNames(
+                        isActive
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium"
+                      )
+                    }
+                    aria-current={({ isActive }) =>
+                      isActive ? "page" : undefined
+                    }
                   >
                     {item.name}
                   </Disclosure.Button>
@@ -212,7 +230,7 @@ function NavBar({ showProfile, setShowProfile }) {
                       src={
                         user ? (
                           user.photoURL === null ? (
-                            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
                           ) : (
                             user.photoURL
                           )
@@ -238,6 +256,14 @@ function NavBar({ showProfile, setShowProfile }) {
                       onClick={() => {
                         item.name === "Your Profile" &&
                           setShowProfile(!showProfile);
+                        item.name === "Sign out" &&
+                          signOut(auth)
+                            .then(() => {
+                              <Navigate to="/" replace={true} />;
+                            })
+                            .catch((error) => {
+                              console.log("Signout error", error);
+                            });
                       }}
                       key={item.name}
                       as="a"

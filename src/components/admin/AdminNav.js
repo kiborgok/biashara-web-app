@@ -8,12 +8,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function AdminNavBar({ url }) {
+function AdminNavBar() {
   const navigation = [
-    { name: "Dashboard", to: ``, current: true },
-    { name: "Users", to: `users`, current: false },
-    { name: "Categories", to: `categories`, current: false },
-    { name: "Businesses", to: `businesses`, current: false },
+    { name: "Categories", to: `categories` },
+    { name: "Businesses", to: `businesses` },
   ];
   return (
     <Disclosure as="nav" className="bg-gray-800 w-max rounded mb-6">
@@ -23,9 +21,7 @@ function AdminNavBar({ url }) {
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <h2 className="text-white font-bold text-3xl">
-                    Admin
-                  </h2>
+                  <h2 className="text-white font-bold text-3xl">Admin</h2>
                 </div>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
@@ -33,13 +29,17 @@ function AdminNavBar({ url }) {
                       <NavLink
                         key={item.name}
                         to={item.to}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
+                        className={({ isActive }) =>
+                          classNames(
+                            isActive
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium"
+                          )
+                        }
+                        aria-current={({ isActive }) =>
+                          isActive ? "page" : undefined
+                        }
                       >
                         {item.name}
                       </NavLink>
@@ -69,13 +69,17 @@ function AdminNavBar({ url }) {
                   key={item.name}
                   as={NavLink}
                   to={item.to}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block px-3 py-2 rounded-md text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
+                  className={({ isActive }) =>
+                    classNames(
+                      isActive
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "block px-3 py-2 rounded-md text-base font-medium"
+                    )
+                  }
+                  aria-current={({ isActive }) =>
+                    isActive ? "page" : undefined
+                  }
                 >
                   {item.name}
                 </Disclosure.Button>

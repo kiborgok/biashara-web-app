@@ -1,15 +1,19 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // import { ExclamationIcon } from "@heroicons/react/outline";
 import RatingForm from "./RatingForm";
+import { UserContext } from "../context/UserContext";
 
-export function ItemDetails({ setShow, show, item }) {
+export function ItemDetails({ setShow, show, item, ratings }) {
+  const {user} = useContext(UserContext)
   const [open, setOpen] = useState(true);
   // const [itemData, setItemData] = useState(item);
 
   const cancelButtonRef = useRef(null);
-  console.log(item)
+
+  const owner = user ? ratings.find((rating) => rating.ratingOwner === user.uid && rating.businessId === item.id) : null
+  console.log(owner)
 
   return (
     <Transition.Root show={open} as={Fragment} onClick={() => setShow(!show)}>
@@ -74,7 +78,7 @@ export function ItemDetails({ setShow, show, item }) {
                             </span>
                           ))}
                         </div>
-                        <RatingForm />
+                        {user ? owner ? null : <RatingForm item={item} /> : null}
                       </div>
                     </div>
                   </div>
