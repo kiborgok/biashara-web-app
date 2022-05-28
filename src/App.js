@@ -41,7 +41,6 @@ function App() {
     return (
       <div
         style={{
-          backgroundColor: "smoke",
           position: "absolute",
           top: "0px",
           bottom: "0px",
