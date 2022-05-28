@@ -5,7 +5,7 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import app from "../api/firebaseConfig";
 import { getAuth, signOut } from "firebase/auth";
 
-import { NavLink,Navigate } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 // const user = {
@@ -32,6 +32,7 @@ function classNames(...classes) {
 function NavBar({ showProfile, setShowProfile }) {
   const { user } = useContext(UserContext);
   const auth = getAuth(app);
+  const navigate = useNavigate();
   return (
     <Disclosure as="nav" className="bg-yellow-200">
       {({ open }) => (
@@ -133,9 +134,7 @@ function NavBar({ showProfile, setShowProfile }) {
                                       return setShowProfile(!showProfile);
                                     else if (item.name === "Sign out") {
                                       signOut(auth)
-                                        .then(() => {
-                                          <Navigate to="/" replace={true} />;
-                                        })
+                                        .then(() => navigate("/"))
                                         .catch((error) => {
                                           console.log("Signout error", error);
                                         });

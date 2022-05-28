@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { signIn } from "../api/authApi";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 function SigninPage() {
@@ -12,6 +12,8 @@ function SigninPage() {
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate()
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -24,7 +26,7 @@ function SigninPage() {
     setLoading(true)
     try {
       await signIn(signinData.email, signinData.password);
-      <Navigate to="/" replace={true} />;
+      navigate("/");
       setLoading(false);
     } catch (error) {
       setError(
@@ -39,7 +41,7 @@ function SigninPage() {
     loginUser();
   }
 
-  if (user) return <Navigate to="/" replace={true} />;
+  if (user) return <Navigate to="/" />;
 
   return (
     <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
