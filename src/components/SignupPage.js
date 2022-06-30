@@ -2,14 +2,14 @@ import React, { useContext, useState } from "react";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { signUp } from "../api/authApi";
 import { Navigate } from "react-router-dom";
-import { useToken } from '../hooks/useToken'
+import { useToken } from "../hooks/useToken";
 import useUser from "../hooks/useUser";
 
 function SignupPage() {
-  const [,setToken] = useToken()
+  const [, setToken] = useToken();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const user = useUser()
+  const user = useUser();
   const [signupData, setSignpData] = useState({
     first_name: "",
     last_name: "",
@@ -27,13 +27,16 @@ function SignupPage() {
   }
   async function createUser() {
     setLoading(true);
-    try {
-      const { token } = await signUp(signupData);
-      await setToken(token)
-      window.location.reload()
+    const response = await signUp(signupData);
+    if (response && response.token) {
+      await setToken(() => response.token);
+      window.location.reload();
       setLoading(false);
-    } catch (error) {
-      setError(error);
+    } else if(response && response.message) {
+      setError(() => response.message);
+      setLoading(false);
+    } else {
+      setError(() => "Check your internet connection and try again.");
       setLoading(false);
     }
   }
