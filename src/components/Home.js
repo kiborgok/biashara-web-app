@@ -8,7 +8,7 @@ import ItemDetails from "./ItemDetails";
 import Header from "./Header";
 import { getBusinesses, getRatings } from "../api/businessApi";
 
-function RatingApp({ initialRating }) {
+export function RatingApp({ initialRating }) {
   return (
     <Rating
       emptySymbol={<Star color="orange" size={20} />}
