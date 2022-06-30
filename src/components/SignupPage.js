@@ -29,7 +29,7 @@ function SignupPage() {
     setLoading(true);
     const response = await signUp(signupData);
     if (response && response.token) {
-      await setToken(() => response.token);
+      await setToken(response.token);
       window.location.reload();
       setLoading(false);
     } else if(response && response.message) {
