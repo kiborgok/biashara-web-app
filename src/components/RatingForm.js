@@ -42,6 +42,7 @@ export default function RatingForm({ item }) {
                 className="p-4 text-gray-500 rounded-xl resize-none"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
+                required
               />
               <button
                 type="submit"
