@@ -1,19 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { signIn } from "../api/authApi";
-import { Navigate, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import { Navigate } from "react-router-dom";
+import { useToken } from "../hooks/useToken";
+import useUser from "../hooks/useUser";
 
 function SigninPage() {
+  const [, setToken] = useToken();
+  const user = useUser();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(UserContext);
   const [signinData, setSigninData] = useState({
     email: "",
     password: "",
   });
-
-  const navigate = useNavigate()
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -22,17 +22,20 @@ function SigninPage() {
       [name]: value,
     });
   }
+
   async function loginUser() {
-    setLoading(true)
-    try {
-      await signIn(signinData.email, signinData.password);
-      navigate("/");
+    setLoading(true);
+    const response = await signIn(signinData);
+    if (response && response.token) {
+      await setToken(response.token);
+      window.location.reload();
       setLoading(false);
-    } catch (error) {
-      setError(
-        error.code === "auth/wrong-password" ? "Wrong email/password" : "Try again later"
-      );
-      setLoading(false)
+    } else if(response && response.message) {
+      setError(() => response.message);
+      setLoading(false);
+    } else {
+      setError(() => "Check your internet connection and try again.");
+      setLoading(false);
     }
   }
 
