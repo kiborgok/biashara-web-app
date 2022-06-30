@@ -88,15 +88,17 @@ export default function BusinessesTable() {
     e.preventDefault();
     if (business.category.id === "NULL") return alert("Select category please");
     if (!imgUrl) return alert("Please choose an image");
-    if (services.length === 0) return alert("No service added");
+    if (services.length === 0) return alert("Add atleast 1 service you provide");
     const businessObj = {
       ...business,
-      image: imgUrl,
+      category_id: business.category.id,
+      image_url: imgUrl,
       services,
       rating: 0,
     };
-    const id = await addBusiness(businessObj);
-    setBusinesses([...businesses, { ...businessObj, id }]);
+    const response = await addBusiness(businessObj);
+    console.log(response)
+    setBusinesses([...businesses, response]);
   }
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
@@ -257,20 +259,20 @@ export default function BusinessesTable() {
         <tbody>
           {businesses.map((business) => (
             <tr
-              key={business.id}
+              key={business['id']}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               <th
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
               >
-                {business.id}
+                {business['id']}
               </th>
               <td className="px-6 py-4">
-                <img className="h-10 w-10 rounded-full" src={business.image} alt={business.name}/>
+                <img className="h-10 w-10 rounded-full" src={business.image_url} alt={business.name}/>
               </td>
               <td className="px-6 py-4">{business.name}</td>
-              <td className="px-6 py-4">{business.category.name}</td>
+              <td className="px-6 py-4">{business.category_id.name}</td>
               <td className="px-6 py-4">{business.description}</td>
               <td className="px-6 py-4 text-right">
                 <button className="font-medium text-red-600 dark:text-red-500 hover:underline">

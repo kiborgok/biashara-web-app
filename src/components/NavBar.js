@@ -1,4 +1,4 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
@@ -30,8 +30,19 @@ function classNames(...classes) {
 }
 
 function NavBar({ showProfile, setShowProfile }) {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const auth = getAuth(app);
+    useEffect(() => {
+      getUser();
+    }, []);
+
+    function getUser() {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    }
   const navigate = useNavigate();
   return (
     <Disclosure as="nav" className="bg-yellow-200">

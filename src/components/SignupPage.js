@@ -1,19 +1,22 @@
 import React, { useContext, useState } from "react";
 import { LockClosedIcon } from "@heroicons/react/solid";
 import { signUp } from "../api/authApi";
-import { Navigate, useNavigate } from "react-router-dom"
-import { UserContext } from "../context/UserContext";
+import { Navigate } from "react-router-dom";
+import { useToken } from '../hooks/useToken'
+import useUser from "../hooks/useUser";
 
 function SignupPage() {
-   const [error, setError] = useState(null);
-   const [loading, setLoading] = useState(false);
-  const {user} = useContext(UserContext)
+  const [,setToken] = useToken()
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const user = useUser()
   const [signupData, setSignpData] = useState({
+    first_name: "",
+    last_name: "",
+    photo_url: "",
     email: "",
     password: "",
   });
-
-const navigate = useNavigate()
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -25,14 +28,13 @@ const navigate = useNavigate()
   async function createUser() {
     setLoading(true);
     try {
-     await signUp(signupData.email, signupData.password);
-      navigate("/");
+      const { token } = await signUp(signupData);
+      await setToken(token)
+      window.location.reload()
       setLoading(false);
     } catch (error) {
-       setError(
-         error.code === "auth/weak-password" ? "Password should be at least 6 characters" : "Try again later"
-       );
-       setLoading(false);
+      setError(error);
+      setLoading(false);
     }
   }
 
@@ -40,7 +42,7 @@ const navigate = useNavigate()
     e.preventDefault();
     createUser();
   }
-  if(user) return <Navigate to="/" />;
+  if (user) return <Navigate to="/" />;
   return (
     <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -57,6 +59,36 @@ const navigate = useNavigate()
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-2">
             {error ? <p className="text-red-600">{error}</p> : null}
+            <div>
+              <label htmlFor="first-name" className="sr-only">
+                First Name
+              </label>
+              <input
+                id="first_name"
+                name="first_name"
+                type="text"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-yellow-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="First Name"
+                value={signupData.first_name}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="last-name" className="sr-only">
+                Last Name
+              </label>
+              <input
+                id="last_name"
+                name="last_name"
+                type="text"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-yellow-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="last Name"
+                value={signupData.last_name}
+                onChange={handleChange}
+              />
+            </div>
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address

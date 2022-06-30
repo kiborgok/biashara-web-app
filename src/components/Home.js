@@ -56,7 +56,7 @@ function Home() {
     }, []);
     return mergedList;
   }
-  const duplicateCategories = businesses.map(business => business.category)
+  const duplicateCategories = businesses.map(business => business.category_id)
   const categoriesToDisplay = dedupe(duplicateCategories)
   const businessesToDisplay = businesses.filter(business => business.name.toLowerCase().includes(search.toLowerCase()))
   return (
@@ -79,17 +79,13 @@ function Home() {
                   </h2>
                   <div className="mt-6 space-y-12 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
                     {businessesToDisplay.map((business) => {
-                      const businessRating = ratings
-                        .filter((rating) => rating.businessId === business.id)
-                        .map((rating) => rating.rating)
+                      const businessRating = business.reviews
+                        .map((review) => review ? review.rate : 0)
                         .reduce((prev, curr) => prev + curr, 0);
                       const rate = Math.floor(
-                        businessRating /
-                          ratings.filter(
-                            (rating) => rating.businessId === business.id
-                          ).length
+                        businessRating / business.reviews.length
                       );
-                      return category.name === business.category.name ? (
+                      return category.name === business.category_id.name ? (
                         <div
                           key={business.id}
                           className="group relative bg-violet-100"
@@ -100,7 +96,7 @@ function Home() {
                         >
                           <div className="relative w-full h-80 bg-white rounded-lg overflow-hidden group-hover:opacity-75 sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
                             <img
-                              src={business.image}
+                              src={business.image_url}
                               alt={business.name}
                               className="w-full h-full object-center object-cover"
                             />
@@ -128,21 +124,9 @@ function Home() {
                               <span>{<RatingApp initialRating={rate} />}</span>{" "}
                               <span className="ml-2 text-gray-400">
                                 (
-                                {ratings.filter(
-                                  (rating) => rating.businessId === business.id
-                                ).length === 1
-                                  ? `${
-                                      ratings.filter(
-                                        (rating) =>
-                                          rating.businessId === business.id
-                                      ).length
-                                    } Review`
-                                  : `${
-                                      ratings.filter(
-                                        (rating) =>
-                                          rating.businessId === business.id
-                                      ).length
-                                    } Reviews`}
+                                {business.reviews.length === 1
+                                  ? `${business.reviews.length} Review`
+                                  : `${business.reviews.length} Reviews`}
                                 )
                               </span>
                             </p>

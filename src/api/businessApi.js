@@ -9,43 +9,53 @@ import app from "./firebaseConfig";
 
 const db = getFirestore(app);
 
+const BASE_URL = "http://127.0.0.1:9292";
+
 export async function addBusiness(business) {
   try {
-    const { id } = await addDoc(collection(db, "biashara-businesses"), {
-      business,
-    });
-      return id
-    // dispatch({type: "ADD_CATEGORY", payload: category})
-  } catch (error) {}
+    const response = await fetch(BASE_URL + '/api/v1/businesses', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(business)
+    })
+    return await response.json()
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-export async function addRating(rating) {
+export async function addRating({comment, rate, user_id, business_id}) {
   try {
-    const { id } = await addDoc(collection(db, "biashara-rating"), {
-      rating,
+    const response = await fetch(`${BASE_URL}/api/v1/reviews/${user_id}/${business_id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({comment,rate,user_id,business_id})
     });
-    return id;
-  } catch (error) {}
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
 }
+
 
 export async function getRatings() {
-  const ratingsCollection = collection(db, "biashara-rating");
-  const ratings = await getDocs(ratingsCollection);
-  const ratingsList = ratings.docs.map((doc) => {
-    const id = doc.id;
-    const { rating } = doc.data();
-    return { ...rating, id };
-  });
-  return ratingsList;
+  try {
+    const response = await fetch(BASE_URL + "/api/v1/reviews");
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function getBusinesses() {
-  const businessesCollection = collection(db, "biashara-businesses");
-  const businesses = await getDocs(businessesCollection);
-  const businessesList = businesses.docs.map((doc) => {
-    const id = doc.id;
-      const {business} = doc.data();
-    return {...business, id};
-  });
-  return businessesList;
+  try {
+    const response = await fetch(BASE_URL + '/api/v1/businesses')
+    return response.json()
+  } catch (error) {
+    console.log(error)
+  }
 }

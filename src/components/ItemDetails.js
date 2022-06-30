@@ -3,16 +3,17 @@ import { Fragment, useContext, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // import { ExclamationIcon } from "@heroicons/react/outline";
 import RatingForm from "./RatingForm";
-import { UserContext } from "../context/UserContext";
+// import { UserContext } from "../context/UserContext";
+import useUser from "../hooks/useUser";
 
 export function ItemDetails({ setShow, show, item, ratings }) {
-  const {user} = useContext(UserContext)
+  const user = useUser();
   const [open, setOpen] = useState(true);
   // const [itemData, setItemData] = useState(item);
 
   const cancelButtonRef = useRef(null);
 
-  const owner = user ? ratings.find((rating) => rating.ratingOwner === user.uid && rating.businessId === item.id) : null
+  const owner = user ? ratings.find((rating) => rating.user_id === user.userId && rating.business_id === item.id) : null
   console.log(owner)
 
   return (
@@ -56,7 +57,7 @@ export function ItemDetails({ setShow, show, item, ratings }) {
                       <div className="max-w-sm rounded overflow-hidden shadow">
                         <img
                           className="w-full"
-                          src={item.image}
+                          src={item.image_url}
                           alt="Sunset in the mountains"
                         />
                         <div className="px-6 py-4">

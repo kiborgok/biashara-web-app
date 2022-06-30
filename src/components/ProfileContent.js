@@ -15,14 +15,16 @@ const storage = getStorage(app);
 export default function ProfileContent() {
   const { user, setUser } = useContext(UserContext);
   const [progresspercent, setProgresspercent] = useState(0);
-  const [displayName, setDisplayName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setDisplayName(user ? (!user.displayName ? "" : user.displayName) : "");
+    setFirstName(user ? (!user.first_name ? "" : user.first_name) : "");
+    setLastName(user ? (!user.last_name ? "" : user.first_name) : "");
     setEmail(user ? user.email : "");
   }, [user]);
 
@@ -71,20 +73,20 @@ export default function ProfileContent() {
   function handleSubmit(e) {
     
     e.preventDefault();
-    setLoading(true);
-    const loginAndUpdate = async () => {
-      await updateProfile(auth.currentUser, {
-        displayName,
-      })
-        .then(() => {
-          setLoading(false);
-          setMsg("Display name updated successfully")
-        })
-        .catch((error) => {
-          setLoading(false);
-        });
-    };
-    loginAndUpdate();
+    // setLoading(true);
+    // const loginAndUpdate = async () => {
+    //   await updateProfile(auth.currentUser, {
+    //     displayName,
+    //   })
+    //     .then(() => {
+    //       setLoading(false);
+    //       setMsg("Display name updated successfully")
+    //     })
+    //     .catch((error) => {
+    //       setLoading(false);
+    //     });
+    // };
+    // loginAndUpdate();
   }
 
   return (
@@ -142,15 +144,30 @@ export default function ProfileContent() {
                       htmlFor="username"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Display Name
+                      First Name
                     </label>
                     {msg ? <h2 className="text-green-400">{msg}</h2> : null}
                     <input
                       type="text"
-                      name="username"
-                      id="username"
-                      value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
+                      name="firstName"
+                      id="firstName"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      autoComplete="family-name"
+                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2"
+                    />
+                    <label
+                      htmlFor="username"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      id="lastName"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       autoComplete="family-name"
                       className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2"
                     />

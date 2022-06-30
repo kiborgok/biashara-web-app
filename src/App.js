@@ -1,6 +1,7 @@
 /* Requires Tailwind CSS v2.0+ */
 import React, { useContext, useEffect, useState } from "react";
 
+
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import app from "./api/firebaseConfig";
@@ -17,7 +18,6 @@ import Admin from "./components/admin/Admin";
 import { UserContext } from "./context/UserContext";
 
 function App() {
-  const auth = getAuth(app);
   const [showProfile, setShowProfile] = useState(false);
   const [loading, setLoading] = useState(true);
   const { user, setUser } = useContext(UserContext);
@@ -26,7 +26,6 @@ function App() {
   }, []);
 
   function getUser() {
-    onAuthStateChanged(auth, (user) => {
       if (user) {
         setLoading(false);
         setUser(user);
@@ -34,7 +33,6 @@ function App() {
         setLoading(false);
         setUser(null);
       }
-    });
   }
 
   if (loading && !user)

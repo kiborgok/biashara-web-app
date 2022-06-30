@@ -1,18 +1,18 @@
 import React, { useContext, useState } from "react";
 import { addRating } from "../api/businessApi";
-import { UserContext } from "../context/UserContext";
+import useUser from "../hooks/useUser";
 import Rating from "./Rating";
 
 export default function RatingForm({ item }) {
-  const {user} = useContext(UserContext)
+  const user = useUser()
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   async function adRating() {
     await addRating({
-      businessId: item.id,
-      rating,
-      ratingComment: comment,
-      ratingOwner: user.uid
+      business_id: item.id,
+      rate: rating,
+      comment: comment,
+      user_id: user.userId
     });
   }
   function handleSubmit(e) {

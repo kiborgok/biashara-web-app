@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
 import { addCategory, getCategories } from "../../api/categoryApi";
 export default function CategoriesTable() {
-  const [name, setName] = useState('')
+  const [category, setCategory] = useState("");
   const [categories, setCategories] = useState([]);
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const id = await addCategory(name)
-    setCategories([...categories, {id,name}])
-  }
+    e.preventDefault();
+    const { id, name } = await addCategory(category);
+    setCategories([...categories, { id, name }]);
+    setCategory("");
+  };
   async function fetchCategories() {
-    const categories = await getCategories()
-    setCategories(categories)
+    const categories = await getCategories();
+    setCategories(categories);
   }
   useEffect(() => {
-    console.log(categories.length);
-    categories.length === 0 && fetchCategories();
-    
-  }, [categories]);
+    fetchCategories();
+  }, []);
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
       <form
@@ -33,8 +33,8 @@ export default function CategoriesTable() {
               id="category"
               name="category"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
               autoComplete="category"
               required
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -63,17 +63,22 @@ export default function CategoriesTable() {
           </tr>
         </thead>
         <tbody>
-          {categories.map((category) => (
-            <tr key={category.id} className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-              >
-                {category.id}
-              </th>
-              <td className="px-6 py-4">{ category.name}</td>
-            </tr>
-          ))}
+          {categories.length === 0
+            ? "Loading..."
+            : categories.map((category) => (
+                <tr
+                  key={category.id}
+                  className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                  >
+                    {category.id}
+                  </th>
+                  <td className="px-6 py-4">{category.name}</td>
+                </tr>
+              ))}
         </tbody>
       </table>
     </div>
