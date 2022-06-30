@@ -1,14 +1,3 @@
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-} from "firebase/firestore/lite";
-
-import app from "./firebaseConfig";
-
-const db = getFirestore(app);
-
 const BASE_URL = "http://127.0.0.1:9292";
 
 export async function addBusiness(business) {
