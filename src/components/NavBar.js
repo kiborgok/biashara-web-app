@@ -7,13 +7,8 @@ import { getAuth, signOut } from "firebase/auth";
 
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import useUser from "../hooks/useUser";
 
-// const user = {
-//   name: "Tom Cook",
-//   email: "tom@example.com",
-//   imageUrl:
-//     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-// };
 const navigation = [
   { name: "Home", to: "/" },
   { name: "Sign Up", to: "/signup" },
@@ -30,19 +25,8 @@ function classNames(...classes) {
 }
 
 function NavBar({ showProfile, setShowProfile }) {
-  const { user, setUser } = useContext(UserContext);
+  const user = useUser()
   const auth = getAuth(app);
-    useEffect(() => {
-      getUser();
-    }, []);
-
-    function getUser() {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    }
   const navigate = useNavigate();
   return (
     <Disclosure as="nav" className="bg-yellow-200">
@@ -117,9 +101,9 @@ function NavBar({ showProfile, setShowProfile }) {
                             className="h-8 w-8 rounded-full"
                             src={
                               user
-                                ? user.photoURL === null
+                                ? user.photo_url === ""
                                   ? "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
-                                  : user.photoURL
+                                  : user.photo_url
                                 : "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
                             }
                             alt=""
@@ -239,10 +223,10 @@ function NavBar({ showProfile, setShowProfile }) {
                       className="h-10 w-10 rounded-full"
                       src={
                         user ? (
-                          user.photoURL === null ? (
+                          user.photo_url === "" ? (
                             "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
                           ) : (
-                            user.photoURL
+                            user.photo_url
                           )
                         ) : (
                           <h6>Loading...</h6>
