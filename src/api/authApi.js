@@ -25,10 +25,36 @@ export async function signUp(user) {
   }
 }
 
-// export async function signUp(email, password) {
-//   return await createUserWithEmailAndPassword(auth, email, password);
-// }
+export async function signIn(user) {
+  try {
+    const response = await fetch(BASE_URL + "/api/v1/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-export async function signIn(email, password) {
-  return await signInWithEmailAndPassword(auth, email, password);
+export async function updateProfile({ first_name, last_name, user_id, photo_url }) {
+  try {
+    const response = await fetch(`${BASE_URL}/api/v1/users/${user_id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        first_name,
+        last_name,
+        photo_url
+      }),
+    });
+    return await response.json();
+  } catch (error) {
+    return error;
+  }
 }
