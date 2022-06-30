@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
-
-import { getAuth, updateProfile } from "firebase/auth";
+import { updateProfile } from "../api/authApi";
+import useUser from "../hooks/useUser";
+import { useToken } from "../hooks/useToken";
 import {
   getStorage,
   ref,
@@ -9,11 +9,11 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import app from "../api/firebaseConfig";
-const auth = getAuth(app);
 const storage = getStorage(app);
 
 export default function ProfileContent() {
-  const { user, setUser } = useContext(UserContext);
+  const [, setToken] = useToken();
+  const user = useUser();
   const [progresspercent, setProgresspercent] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -21,20 +21,28 @@ export default function ProfileContent() {
   const [msg, setMsg] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [photoImage, setPhotoImage] = useState("");
 
   useEffect(() => {
     setFirstName(user ? (!user.first_name ? "" : user.first_name) : "");
-    setLastName(user ? (!user.last_name ? "" : user.first_name) : "");
+    setLastName(user ? (!user.last_name ? "" : user.last_name) : "");
     setEmail(user ? user.email : "");
+    setPhotoImage(user ? user.photo_url : "");
   }, [user]);
 
-  function updatePhoto(uri) {
-    updateProfile(auth.currentUser, {
-      photoURL: uri,
+  function updateProfileContent() {
+    updateProfile({
+      first_name: firstName,
+      last_name: lastName,
+      photo_url: photoImage,
+      user_id: user.userId
     })
-      .then(() => {
-        setUser({ ...user, photoURL: uri });
-        setProfile("Profile updated successfully")
+      .then((res) => {
+        if (res && res.token) {
+          setToken(res.token);
+        }
+      }).then(() => {
+        setProfile("Profile updated successfully");
       })
       .catch((error) => {
         console.log(error);
@@ -64,15 +72,16 @@ export default function ProfileContent() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          updatePhoto(downloadURL);
+          setPhotoImage(downloadURL);
+          setProfile("Profile photo upload complete");
         });
       }
     );
   }
 
   function handleSubmit(e) {
-    
     e.preventDefault();
+    updateProfileContent()
     // setLoading(true);
     // const loginAndUpdate = async () => {
     //   await updateProfile(auth.currentUser, {
@@ -122,8 +131,8 @@ export default function ProfileContent() {
                       <img
                         className="h-8 w-8 rounded-full"
                         src={
-                          user && user.photoURL !== null
-                            ? user.photoURL
+                          user && user.photo_url !== ""
+                            ? photoImage
                             : "https://firebasestorage.googleapis.com/v0/b/biashara-hub.appspot.com/o/3599743.jpg?alt=media&token=190c1a9d-0465-4ac9-9959-9697da8a8c84"
                         }
                         alt="Profile"
