@@ -1,3 +1,5 @@
+const BASE_URL = "http://127.0.0.1:9292";
+
 export async function signUp(user) {
   try {
     const response = await fetch(BASE_URL + "/api/v1/signup", {
@@ -28,7 +30,12 @@ export async function signIn(user) {
   }
 }
 
-export async function updateProfile({ first_name, last_name, user_id, photo_url }) {
+export async function updateProfile({
+  first_name,
+  last_name,
+  user_id,
+  photo_url,
+}) {
   try {
     const response = await fetch(`${BASE_URL}/api/v1/users/${user_id}`, {
       method: "PATCH",
@@ -38,7 +45,7 @@ export async function updateProfile({ first_name, last_name, user_id, photo_url 
       body: JSON.stringify({
         first_name,
         last_name,
-        photo_url
+        photo_url,
       }),
     });
     return await response.json();
