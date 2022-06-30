@@ -128,11 +128,10 @@ function NavBar({ showProfile, setShowProfile }) {
                                     if (item.name === "Your Profile")
                                       return setShowProfile(!showProfile);
                                     else if (item.name === "Sign out") {
-                                      signOut(auth)
-                                        .then(() => navigate("/"))
-                                        .catch((error) => {
-                                          console.log("Signout error", error);
-                                        });
+                                      if (item.name === "Sign out") {
+                                        localStorage.removeItem("token");
+                                        window.location.reload();
+                                      }
                                     }
                                   }}
                                   to={item.to}
@@ -250,14 +249,10 @@ function NavBar({ showProfile, setShowProfile }) {
                       onClick={() => {
                         item.name === "Your Profile" &&
                           setShowProfile(!showProfile);
-                        item.name === "Sign out" &&
-                          signOut(auth)
-                            .then(() => {
-                              <Navigate to="/" replace={true} />;
-                            })
-                            .catch((error) => {
-                              console.log("Signout error", error);
-                            });
+                        if (item.name === "Sign out"){
+                          localStorage.removeItem("token");
+                          window.location.reload()
+                        }
                       }}
                       key={item.name}
                       as="a"
