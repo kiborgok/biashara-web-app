@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {  useState } from "react";
 import { addRating } from "../api/businessApi";
 import useUser from "../hooks/useUser";
 import Rating from "./Rating";
@@ -14,6 +14,7 @@ export default function RatingForm({ item }) {
       comment: comment,
       user_id: user.userId
     });
+    window.location.reload()
   }
   function handleSubmit(e) {
     e.preventDefault();
