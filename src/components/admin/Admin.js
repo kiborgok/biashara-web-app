@@ -5,10 +5,10 @@ import BusinessesTable from './BusinessesPage';
 import CategoriesTable from './CategoriesPage';
 import Dashboard from './Dashboard';
 import {Navigate} from "react-router-dom"
-import { UserContext } from '../../context/UserContext';
+import useUser from '../../hooks/useUser';
 
 function Admin() {
-  const {user} = useContext(UserContext)
+  const user = useUser()
   if(!user) return <Navigate to="/" replace={true} />
     return (
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 p-2">
