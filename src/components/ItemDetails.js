@@ -5,6 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import RatingForm from "./RatingForm";
 // import { UserContext } from "../context/UserContext";
 import useUser from "../hooks/useUser";
+import { RatingApp } from "./Home";
 
 export function ItemDetails({ setShow, show, item, ratings }) {
   const user = useUser();
@@ -13,8 +14,13 @@ export function ItemDetails({ setShow, show, item, ratings }) {
 
   const cancelButtonRef = useRef(null);
 
-  const owner = user ? ratings.find((rating) => rating.user_id === user.userId && rating.business_id === item.id) : null
-  console.log(owner)
+  const owner = user
+    ? ratings.find(
+        (rating) =>
+          rating.user_id === user.userId && rating.business_id === item.id
+      )
+    : null;
+  console.log(owner);
 
   return (
     <Transition.Root show={open} as={Fragment} onClick={() => setShow(!show)}>
@@ -79,19 +85,46 @@ export function ItemDetails({ setShow, show, item, ratings }) {
                             </span>
                           ))}
                         </div>
-                        {user ? owner ? null : <RatingForm item={item} /> : null}
+                        {user ? (
+                          owner ? null : (
+                            <RatingForm item={item} />
+                          )
+                        ) : null}
+                        <div className="px-6 py-4">
+                          <div className="font-bold text-xl mb-2">Reviews</div>
+                          <>
+                            {ratings
+                              .filter(
+                                (review) =>
+                                  review && review.business_id === item.id
+                              )
+                              .map((review) => (
+                                <div
+                                  key={review.id}
+                                  className="border-2 border-orange-500 rounded-md px-2 py-2 my-2"
+                                >
+                                  <h4>
+                                    <span className="font-bold">Rating:</span>{" "}
+                                    <RatingApp initialRating={review.rate} />
+                                  </h4>
+                                  <h3>
+                                    <span className="font-bold">Name:</span>{" "}
+                                    {review.user.first_name}{" "}
+                                    {review.user.first_name}
+                                  </h3>
+                                  <p>
+                                    <span className="font-bold">Comment:</span>{" "}
+                                    {review.comment}
+                                  </p>
+                                </div>
+                              ))}
+                          </>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  {/* <button
-                    type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
-                  >
-                    Deactivate
-                  </button> */}
                   <button
                     type="button"
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
