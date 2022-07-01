@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:9292";
+const BASE_URL = "https://biashara-api.herokuapp.com";
 
 export async function signUp(user) {
   try {

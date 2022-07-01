@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:9292";
+const BASE_URL = "https://biashara-api.herokuapp.com";
 
 export async function addBusiness(business) {
   try {
@@ -46,5 +46,16 @@ export async function getBusinesses() {
     return response.json()
   } catch (error) {
     console.log(error)
+  }
+}
+
+export async function deleteBusiness(business_id) {
+  try {
+    const response = await fetch(`${BASE_URL}/api/v1/businesses/${business_id}`,{
+      method: "DELETE"
+    });
+    return response.json();
+  } catch (error) {
+    console.log(error);
   }
 }
