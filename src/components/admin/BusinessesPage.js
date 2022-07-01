@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getCategories } from "../../api/categoryApi";
-import { addBusiness, getBusinesses } from "../../api/businessApi";
+import { addBusiness, deleteBusiness, getBusinesses } from "../../api/businessApi";
 import {
   getStorage,
   ref,
@@ -36,6 +36,12 @@ export default function BusinessesTable() {
       ...business,
       [name]: value,
     });
+  }
+
+  const handleDelete = (business_id) => {
+    const newBusinesses = businesses.filter(business => business.id !== business_id)
+    setBusinesses(newBusinesses)
+    deleteBusiness(business_id);
   }
 
   async function fetchCategories() {
@@ -275,7 +281,7 @@ export default function BusinessesTable() {
               <td className="px-6 py-4">{business.category_id.name}</td>
               <td className="px-6 py-4">{business.description}</td>
               <td className="px-6 py-4 text-right">
-                <button className="font-medium text-red-600 dark:text-red-500 hover:underline">
+                <button onClick={() => handleDelete(business.id)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
                   Delete
                 </button>
               </td>
