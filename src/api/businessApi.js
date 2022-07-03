@@ -1,4 +1,4 @@
-const BASE_URL = "https://biashara-hub.web.app";
+const BASE_URL = "https://biashara-api.herokuapp.com";
 
 export async function addBusiness(business) {
   try {
