@@ -110,7 +110,7 @@ export function ItemDetails({ setShow, show, item, ratings }) {
                                   <h3>
                                     <span className="font-bold">Name:</span>{" "}
                                     {review.user.first_name}{" "}
-                                    {review.user.first_name}
+                                    {review.user.last_name}
                                   </h3>
                                   <p>
                                     <span className="font-bold">Comment:</span>{" "}
