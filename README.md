@@ -2,7 +2,7 @@
 
 #### Version v1.0.0
 #### By Alex Kiborgok
-### A project built with React and Firebase API.
+### A project built with React, biashara API and Firebase API.
 
 ## Table of Contents
 
@@ -22,6 +22,8 @@
 * Run "npm install"
 * Run "npm start"
 ## Technologies Used
+* Ruby
+* ActiveRecord
 * React
 * JavaScript
 * FirebaseAPI
